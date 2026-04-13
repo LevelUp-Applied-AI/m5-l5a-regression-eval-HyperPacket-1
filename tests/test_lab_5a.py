@@ -15,7 +15,7 @@ from lab_regression import (load_data, split_data, build_logistic_pipeline,
 
 @pytest.fixture
 def df():
-    data = load_data(os.path.join(os.path.dirname(__file__), "..", "starter", "data", "telecom_churn.csv"))
+    data = load_data(os.path.join(os.path.dirname(__file__), "..", "data", "telecom_churn.csv"))
     assert data is not None, "load_data returned None"
     return data
 

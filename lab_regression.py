@@ -44,12 +44,19 @@ def split_data(df, target_col, test_size=0.2, random_state=42):
     # TODO: Separate features and target, then split with stratification
     X = df.drop(columns=[target_col])
     y = df[target_col]
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y,
-        test_size=test_size,
-        random_state=random_state,
-        stratify=y                  
-    )
+    if len(y.unique()) > 10:  # Assume continuous, don't stratify
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y,
+            test_size=test_size,
+            random_state=random_state
+        )
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y,
+            test_size=test_size,
+            random_state=random_state,
+            stratify=y                  
+        )
     return X_train, X_test, y_train, y_test
 
 
@@ -62,7 +69,7 @@ def build_logistic_pipeline():
     # TODO: Create and return a Pipeline with two steps
     pipeline = Pipeline([
         ('scaler', StandardScaler()),
-        ('logistic_regression', LogisticRegression())
+        ('logistic_regression', LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000))
     ])
     return pipeline
 
@@ -76,7 +83,7 @@ def build_ridge_pipeline():
     # TODO: Create and return a Pipeline for Ridge regression
     pipeline = Pipeline([
         ('scaler', StandardScaler()),
-        ('ridge', Ridge())
+        ('ridge', Ridge(random_state=42))
     ])
     return pipeline
 
